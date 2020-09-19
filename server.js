@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const config = require('config');
 const cors = require('cors');
 
 const app = express();
@@ -11,15 +10,16 @@ app.use(cors());
 app.use(express.json());
 
 //DB Config
-const db = config.get('mongoURI');
+const db = config.get(process.env.MONGO_URI);
 
 //Connect to Mongo
-mongoose.connect(db, { 
+mongoose.connect(db, {
     useNewUrlParser: true,
-     useUnifiedTopology: true, 
-     useCreateIndex:true })
+    useUnifiedTopology: true,
+    useCreateIndex: true
+})
     .then(() => console.log('DB Connected'))
-    .catch(err => console.log(err)); 
+    .catch(err => console.log(err));
 
 //Use Routes`
 app.use('/api/users', require('./routes/api/users'));
