@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const config = require('config');
 const jwt = require('jsonwebtoken');
 
 const validateRegisterInput = require('../../validation/registerValidation');
@@ -48,17 +47,23 @@ router.post('/', (req, res) => {
                         .then(user => {
                             jwt.sign(
                                 { id: user.id },
-                                config.get('jwtSecret'),
+                                process.env.JWT_SECRET,
                                 { expiresIn: 604800 },
                                 (err, token) => {
                                     if (err) throw err;
+                                    res.cookie('access_token', token, {
+                                        maxAge: 2 * 60 * 60 * 1000,
+                                        httpOnly: true,
+                                        // secure: true
+                                    })
                                     res.json({
-                                        token,
                                         user: {
                                             id: user.id,
                                             name: user.name,
-                                            email: user.email
-                                        }
+                                            email: user.email,
+                                            auth: true
+                                        },
+                                        userId: user.id
                                     })
                                 }
                             )

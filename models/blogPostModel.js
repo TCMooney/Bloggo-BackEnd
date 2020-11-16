@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const mongoosePaginate = require('mongoose-paginate-v2');
 const Schema = mongoose.Schema;
 
 const BlogSchema = new Schema({
@@ -29,8 +28,6 @@ BlogSchema.index({
     title: 'text',
     content: 'text'
 });
-
-BlogSchema.plugin(mongoosePaginate);
 
 const Blog = mongoose.model('Blogs', BlogSchema);
 

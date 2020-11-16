@@ -66,22 +66,13 @@ router.get('/getPosts', (req, res) => {
         })
 })
 
-router.get('/totalPosts', (req, res) => {
-    BlogPost.estimatedDocumentCount((err, result) => {
-        if (err) {
-            res.send(err)
-        } else {
-            res.json(result)
-        }
-    })
-})
-
-router.get('/searchPosts', (req, res) => {
+router.get('/searchPosts', auth, (req, res) => {
     BlogPost.find({
         $text: { $search: req.query.query }
     },
         { score: { $meta: 'textScore' } })
         .sort({ score: { $meta: 'textScore' } })
+        .populate('userId')
         .then(blogSearch => {
             res.json(blogSearch)
         })
@@ -90,7 +81,7 @@ router.get('/searchPosts', (req, res) => {
         })
 })
 
-router.get('/getPostById/:id', (req, res) => {
+router.get('/getPostById/:id', auth, (req, res) => {
     BlogPost.findById(req.params.id)
         .populate('userId')
         .exec()
@@ -103,7 +94,7 @@ router.get('/getPostById/:id', (req, res) => {
         })
 })
 
-router.get('/getPostsByUser/:userId', (req, res) => {
+router.get('/getPostsByUser/:userId', auth, (req, res) => {
     BlogPost.find({ userId: req.params.userId })
         .populate('userId')
         .exec()

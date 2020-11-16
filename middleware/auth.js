@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 function auth(req, res, next) {
-    const token = req.header('x-auth-token');
+    const token = req.cookies.access_token;
 
     //Check for token
     if (!token) return res.status(401).json({ auth: false, msg: 'No token, authorization denied' });
@@ -9,7 +9,7 @@ function auth(req, res, next) {
 
     try {
         //Verify token
-        const decoded = jwt.verify(token, config.get(process.env.JWT_SECRET));
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         //Add user from payload
         req.user = decoded;
         next();
