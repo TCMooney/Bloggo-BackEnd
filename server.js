@@ -16,10 +16,10 @@ app.use(cookieParser());
 
 app.use(express.json());
 
-const mongoUri = process.env.MONGO_URI.toString();
+
 
 //Connect to Mongo
-mongoose.connect(mongoUri, {
+mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true
