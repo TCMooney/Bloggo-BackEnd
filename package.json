@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server js"
+    "dev": "nodemon server js",
+    "start": "node server.js"
   },
   "author": "Tom Mooney <tcmooney88@gmail.com> (https://github.com/TCMooney)",
   "license": "ISC",
