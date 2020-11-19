@@ -34,9 +34,9 @@ router.post('/', (req, res) => {
                         (err, token) => {
                             if (err) throw err;
                             res.cookie('access_token', token, {
-                                maxAge: 2 * 60 * 60 * 1000,
-                                httpOnly: true,
-                                secure: true
+                                maxAge: 2 * 60 * 60 * 1000
+                                // httpOnly: true,
+                                // secure: true
                             })
                             res.json({
                                 user: {
