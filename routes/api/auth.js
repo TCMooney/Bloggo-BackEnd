@@ -15,6 +15,8 @@ router.post('/', (req, res) => {
         return res.status(400).json(errors);
     }
 
+
+
     const { email, password } = req.body;
     User.findOne({ email })
         .then(user => {
@@ -33,12 +35,8 @@ router.post('/', (req, res) => {
                         process.env.JWT_SECRET,
                         (err, token) => {
                             if (err) throw err;
-                            res.cookie('access_token', token, {
-                                maxAge: 2 * 60 * 60 * 1000,
-                                httpOnly: true,
-                                domain: 'https://tcm-bloggo.herokuapp.com'
-                                // secure: true
-                            })
+                            sessionData = req.session;
+                            sessionData.access_token = token;
                             res.json({
                                 user: {
                                     id: user.id,
@@ -46,7 +44,8 @@ router.post('/', (req, res) => {
                                     email: user.email,
                                     auth: true
                                 },
-                                userId: user.id
+                                userId: user.id,
+                                sessionData
                             })
                         }
                     )
@@ -55,7 +54,7 @@ router.post('/', (req, res) => {
 })
 
 router.get('/loadUser', auth, (req, res) => {
-    const token = req.cookies.access_token
+    const token = req.session.access_token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     User.findById(decoded.id, { password: 0 }, (err, user) => {
         if (err) return res.status(500).json({ message: 'There was a problem finding the user' });
@@ -80,12 +79,21 @@ router.get('/user', auth, (req, res) => {
 })
 
 router.get('/logout', auth, (req, res) => {
-    const options = {
-        expires: new Date(Date.now() + 10000),
-        secure: process.env.NODE_ENV === 'production' ? true : false,
-        httpOnly: true
-    }
-    res.cookie('access_token', 'expired token', options)
+    // const options = {
+    //     expires: new Date(Date.now() + 10000),
+    //     secure: process.env.NODE_ENV === 'production' ? true : false,
+    //     httpOnly: true
+    // }
+    // req.session('access_token', 'expired token', options)
+    req.session.destroy(function (err) {
+        if (err) {
+            msg = 'Error destroying session';
+        } else {
+            msg = 'Session destroyed successfully';
+            console.log(msg);
+        }
+        res.json(msg)
+    })
     res.status(200).json({ status: 'logout success' })
 })
 

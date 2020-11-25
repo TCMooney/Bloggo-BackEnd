@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const session = require('express-session');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 
@@ -13,6 +14,21 @@ app.use(cors({
     credentials: true
 }));
 app.use(cookieParser());
+
+app.set('trust proxy', 1)
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    name: 'auth_session',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        path: '/',
+        // secure: true,
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000
+    }
+}))
 
 app.use(express.json());
 

@@ -21,6 +21,7 @@ router.get('/getAuthor/:id', (req, res) => {
 })
 
 router.post('/', (req, res) => {
+    console.log(res.session)
     const { errors, isValid } = validateRegisterInput(req.body);
     if (!isValid) {
         return res.status(400).json(errors);
@@ -53,8 +54,7 @@ router.post('/', (req, res) => {
                                     if (err) throw err;
                                     res.cookie('access_token', token, {
                                         maxAge: 2 * 60 * 60 * 1000,
-                                        httpOnly: true,
-                                        domain: 'https://tcm-bloggo.herokuapp.com'
+                                        httpOnly: true
                                         // secure: true
                                     })
                                     res.json({

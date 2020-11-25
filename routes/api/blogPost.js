@@ -33,14 +33,16 @@ router.delete('/:id/delete', auth, (req, res) => {
 })
 
 router.put('/edit/:id', auth, (req, res) => {
+    // console.log(req.user.id)
     BlogPost.findById(req.params.id, (err, post) => {
         if (!post) {
             return res.status(404).json({ msg: 'Post not found' });
         } else {
+            const userId = req.user.id
+            post.userId = userId
             post.title = req.body.title;
             post.content = req.body.content;
             post.tags = req.body.tags;
-            post.userId = req.body.userId;
 
             post.save((err) => {
                 if (err) {

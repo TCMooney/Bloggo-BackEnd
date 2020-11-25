@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 function auth(req, res, next) {
-    const token = req.cookies.access_token;
+    const token = req.session.access_token;
 
     //Check for token
     if (!token) return res.status(401).json({ auth: false, msg: 'No token, authorization denied' });
