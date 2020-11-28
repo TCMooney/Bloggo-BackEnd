@@ -13,7 +13,6 @@ app.use(cors({
     origin: process.env.FRONT_END_URL,
     credentials: true
 }));
-app.use(cookieParser());
 
 app.set('trust proxy', 1)
 
@@ -26,9 +25,11 @@ app.use(session({
         path: '/',
         // secure: true,
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000
+        // maxAge: 24 * 60 * 60 * 1000
     }
 }))
+
+app.use(cookieParser());
 
 app.use(express.json());
 
