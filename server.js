@@ -16,6 +16,7 @@ app.use(cors({
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
+    proxy: true,
     name: 'auth_session',
     resave: false,
     unset: 'destroy',
@@ -23,6 +24,7 @@ app.use(session({
     cookie: {
         sameSite: 'lax',
         // secure: true,
+
         httpOnly: true,
         maxAge: 60000 * 60 * 24
     }
