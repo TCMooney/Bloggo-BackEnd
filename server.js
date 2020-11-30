@@ -14,8 +14,6 @@ app.use(cors({
     credentials: true
 }));
 
-app.set('trust proxy', 1)
-
 app.use(session({
     secret: process.env.SESSION_SECRET,
     name: 'auth_session',
@@ -24,11 +22,13 @@ app.use(session({
     saveUninitialized: true,
     cookie: {
         sameSite: 'lax',
-        // secure: true,
+        secure: true,
         httpOnly: true,
-        maxAge: 60000
+        maxAge: 60000 * 60 * 24
     }
 }))
+
+app.set('trust proxy', 1)
 
 app.use(cookieParser());
 

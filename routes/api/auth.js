@@ -37,7 +37,6 @@ router.post('/', (req, res) => {
                             if (err) throw err;
                             sessionData = req.session;
                             sessionData.access_token = token;
-
                             res.json({
                                 user: {
                                     id: user.id,
@@ -95,7 +94,7 @@ router.get('/logout', auth, (req, res) => {
         }
         res.json(msg)
     })
-    res.status(200).json({ status: 'logout success' })
+    res.status(200)
 })
 
 module.exports = router;
