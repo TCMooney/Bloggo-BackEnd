@@ -52,11 +52,8 @@ router.post('/', (req, res) => {
                                 { expiresIn: 604800 },
                                 (err, token) => {
                                     if (err) throw err;
-                                    res.cookie('access_token', token, {
-                                        maxAge: 2 * 60 * 60 * 1000,
-                                        httpOnly: true
-                                        // secure: true
-                                    })
+                                    sessionData = req.session;
+                                    sessionData.access_token = token;
                                     res.json({
                                         user: {
                                             id: user.id,
@@ -64,7 +61,8 @@ router.post('/', (req, res) => {
                                             email: user.email,
                                             auth: true
                                         },
-                                        userId: user.id
+                                        userId: user.id,
+                                        sessionData
                                     })
                                 }
                             )
